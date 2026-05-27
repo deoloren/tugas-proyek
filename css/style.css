@@ -1191,7 +1191,7 @@ section {
 }
 
 /* --- Responsif Mobile --- */
-@media (max-width: 991px) {
+@media (max-width: 320px) {
     .see-goodness .row {
         flex-direction: column;
         padding: 2rem;
