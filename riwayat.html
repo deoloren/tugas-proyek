@@ -3,107 +3,275 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Review & Lokasi - Galih Coffee</title>
+    <title>Riwayat Kontak - Galih Coffee</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="css/style.css" />
+    <style>
+        .riwayat-section {
+            padding: 2rem 7%;
+            min-height: 80vh;
+        }
+        .riwayat-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 3rem;
+            border-radius: .5rem;
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
+        }
+        .riwayat-container h2 {
+            font-size: 2.5rem;
+            color: #13131a;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #d3ad7f;
+            padding-bottom: 1rem;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+            color: #666;
+        }
+        /* --- STYLING TABEL TERSTRUKTUR --- */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.4rem;
+            text-align: left;
+        }
+        .data-table th {
+            background: #13131a;
+            color: #fff;
+            padding: 1.2rem;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 1.2rem;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+        .data-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        .btn-action {
+            padding: .5rem 1rem;
+            font-size: 1.2rem;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            border-radius: .3rem;
+            margin-right: .5rem;
+        }
+        .btn-edit { background: #d3ad7f; }
+        .btn-edit:hover { background: #b8956c; }
+        .btn-hapus { background: #ff4d4d; }
+        .btn-hapus:hover { background: #cc0000; }
+        .btn-clear {
+            padding: .6rem 1.5rem;
+            font-size: 1.4rem;
+            color: #fff;
+            background: #ff4d4d;
+            cursor: pointer;
+            border-radius: .5rem;
+            border: none;
+        }
+        .btn-clear:hover { background: #cc0000; }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.6rem;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
-     <header class="header">
-      <a href="index.html" class="logo"><img src="img/menu/logo2.jpg" alt="" /></a>
-      <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="tentang-kami.html">Tentang Kami</a>
-        <a href="menu.html">Menu</a>
-        <a href="review.html">review</a>
-         <a href="riwayat.html">riwayat</a>
-      </nav>
-      <div class="icons">
-        <div class="fas fa-search" id="search-btn"></div>
-        <div class="fas fa-shopping-cart" id="cart-btn"></div>
-        <div class="fas fa-bars" id="menu-btn"></div>
-      </div>
 
-      <div class="search-form">
-        <input type="search" id="search-box" placeholder="search here..." />
-        <label for="search-box" class="fas fa-search"></label>
-      </div>
-
-      <div class="cart-items-container">
-        <div class="cart-item">
-          <span class="fas fa-times"></span>
-          <img src="img/menu/menu-1.png" alt="" />
-          <div class="content">
-            <h3>Cafe Latte</h3>
-            <div class="price">15.000</div>
-          </div>
+    <header class="header">
+        <a href="index.html" class="logo"><img src="img/menu/logo2.jpg" alt="" /></a>
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="tentang-kami.html">Tentang Kami</a>
+            <a href="menu.html">Menu</a>
+            <a href="review.html">review</a>
+            <a href="riwayat.html">riwayat</a>
+        </nav>
+        <div class="icons">
+            <div class="fas fa-search" id="search-btn"></div>
+            <div class="fas fa-shopping-cart" id="cart-btn"></div>
+            <div class="fas fa-bars" id="menu-btn"></div>
         </div>
-        <div class="cart-item">
-          <span class="fas fa-times"></span>
-          <img src="img/menu/menu-2.png" alt="" />
-          <div class="content">
-            <h3>Cappuccino Art</h3>
-            <div class="price">13.000</div>
-          </div>
-        </div>
-        <div class="cart-item">
-          <span class="fas fa-times"></span>
-          <img src="img/menu/menu-3.png" alt="" />
-          <div class="content">
-            <h3>Caramel Macchiato</h3>
-            <div class="price">25.000</div>
-          </div>
-        </div>
-        <div class="cart-item">
-          <span class="fas fa-times"></span>
-          <img src="img/menu/menu-4.png" alt="" />
-          <div class="content">
-            <h3>Classic Cappuccino</h3>
-            <div class="price">22.000</div>
-          </div>
-        </div>
-        <a href="#" class="btn">checkout now</a>
-      </div>
     </header>
-    </header>
-
     <main style="padding-top: 10rem;">
-      <section class="about-hero" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('img/menu/1.png') no-repeat;">
-        <div class="content">
-          <h3 class="sub-heading"><span>—</span> Berakar pada Rasa, Bertumbuh dengan Tujuan</h3>
-          <h1 class="main-heading">Tempat di mana setiap aroma menciptakan inspirasi dan setiap sesapan mempererat koneksi.</h1>
-        </div>
+      <section class="about-hero" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('img/menu/gambar14.png') no-repeat;">
+      <div class="content">
+      <h3 class="sub-heading"><span></span>Terimakasih Telah Mengunjungi Toko Kami</h3>
+      <h1 class="main-heading">Silahkan Priksa lagi Pesanan Anda apakah sudah Sesuai.</h1>
+      </div>
       </section>
-      <section class="about-philosophy" id="about">
-          <a href="index.html" class="btn">Kembali Ke Home</a>
-      </section>
-            <section class="see-goodness">
-        <div class="row">
-          <div class="image-container">
-            <img src="img/menu/gambar13.png" alt="Our Story" />
-          </div>
+    </main>
 
-          <div class="content">
-            <h3 class="story-title">Tempat Nongkrong kamu</h3>
-            <h1 class="main-title"></h1>
-            <p>Cari tempat WFC yang asyik di Medan? Galih Coffee punya koneksi internet cepat,
-               colokan yang memadai, dan tentu saja, asupan kafein terbaik untuk menjaga fokusmu. Ubah deadline jadi lebih 
-               menyenangkan dengan suasana yang mendukung kreativitas</p>
-          </div>
-        </div>
-      </section>
-      
-    <footer class="footer-new">
+    <main style="padding-top: 12rem;">
+        <section class="riwayat-section">
+            <div class="riwayat-container">
+                
+                <!-- ================= TABEL 1: REGISTRASI KONTAK ================= -->
+                <h2>Daftar Registrasi Kontak (Formulir)</h2>
+                <div class="toolbar">
+                    <span id="contactCount">0 data</span>
+                    <button id="clearContactBtn" class="btn-clear" style="display: none;">🗑 Hapus Semua Kontak</button>
+                </div>
+                <div class="table-responsive" id="contactTableContainer" style="margin-bottom: 5rem;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>No HP</th>
+                                <th>Tanggal</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contactTableBody">
+                            <!-- Diisi via JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="contactEmptyState" class="empty-state" style="display: none; margin-bottom: 5rem;">
+                    <p>🗂️ Belum ada data registrasi kontak.</p>
+                </div>
+
+
+                <!-- ================= TABEL 2: PESANAN MENU INSTAN ================= -->
+                <h2>Daftar Pesanan Instan (Menu Produk)</h2>
+                <div class="toolbar">
+                    <span id="menuCount">0 pesanan</span>
+                    <button id="clearMenuBtn" class="btn-clear" style="display: none;">🗑 Hapus Semua Pesanan</button>
+                </div>
+                <div class="table-responsive" id="menuTableContainer">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Produk Kopi</th>
+                                <th>Tanggal Pesan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="menuTableBody">
+                            <!-- Diisi via JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="menuEmptyState" class="empty-state" style="display: none;">
+                    <p>🗂️ Belum ada pesanan langsung dari menu.</p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+    <script src="js/script.js"></script>
+    <script>
+        // --- LOGIKA MANIPULASI DOM TABEL RIWAYAT ---
+        const tableBody = document.getElementById('tableBody');
+        const tableContainer = document.getElementById('tableContainer');
+        const emptyState = document.getElementById('emptyState');
+        const dataCount = document.getElementById('dataCount');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+        function tampilkanRiwayatTabel() {
+            let localHistory = JSON.parse(localStorage.getItem('galihCoffeeHistory')) || [];
+            
+            // Update counter jumlah data
+            dataCount.textContent = `${localHistory.length} pengajuan`;
+            
+            // Kosongkan baris tabel lama
+            tableBody.innerHTML = '';
+
+            if (localHistory.length === 0) {
+                tableContainer.style.display = 'none';
+                emptyState.style.display = 'block';
+                clearHistoryBtn.style.display = 'none';
+            } else {
+                tableContainer.style.display = 'block';
+                emptyState.style.display = 'none';
+                clearHistoryBtn.style.display = 'inline-block';
+                
+                // Render baris tabel berdasarkan array localStorage
+                localHistory.forEach((data, index) => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td><strong>${data.name}</strong></td>
+                        <td>${data.email}</td>
+                        <td>${data.phone}</td>
+                        <td style="color: #b8956c; font-weight: bold;"><i class="fas fa-coffee"></i> ${data.coffee}</td>
+                        <td>${data.time}</td>
+                        <td>
+                            <button onclick="editPesanan(${index})" class="btn-action btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button onclick="hapusSatuPesanan(${index})" class="btn-action btn-hapus"><i class="fas fa-trash"></i> Hapus</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        }
+
+        // Fungsi Edit Data Kopi via Dialog Prompt
+        window.editPesanan = function(index) {
+            let localHistory = JSON.parse(localStorage.getItem('galihCoffeeHistory')) || [];
+            const kopiLama = localHistory[index].coffee;
+            
+            const kopiBaru = prompt("Ubah jenis atau detail pesanan kopi:", kopiLama);
+            
+            if (kopiBaru !== null && kopiBaru.trim() !== "") {
+                localHistory[index].coffee = kopiBaru.trim();
+                localStorage.setItem('galihCoffeeHistory', JSON.stringify(localHistory));
+                tampilkanRiwayatTabel();
+            }
+        }
+
+        // Fungsi Hapus Satu Baris Data
+        window.hapusSatuPesanan = function(index) {
+            if(confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                let localHistory = JSON.parse(localStorage.getItem('galihCoffeeHistory')) || [];
+                localHistory.splice(index, 1);
+                localStorage.setItem('galihCoffeeHistory', JSON.stringify(localHistory));
+                tampilkanRiwayatTabel();
+            }
+        }
+
+        // Hapus Semua Data Sekaligus
+        clearHistoryBtn.addEventListener('click', function() {
+            if(confirm('Apakah Anda yakin ingin menghapus seluruh riwayat data?')) {
+                localStorage.removeItem('galihCoffeeHistory');
+                tampilkanRiwayatTabel();
+            }
+        });
+
+        // Panggil fungsi saat pertama kali halaman dimuat
+        tampilkanRiwayatTabel();
+    </script>
+     <footer class="footer-new">
     <div class="box-container">
         <div class="box main-info">
-          <a href="index.html" class="logo">
-              <img src="img/menu/logo2.jpg" alt="Logo"></a>
-          <p class="tagline">sosial media</p>
-          <h3>Ikuti Kami</h3>
-        <div class="share">
-              <a href="https://www.instagram.com/galihcoffee?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="fab fa-instagram"></a>
-              <a href="#" class="fab fa-tiktok"></a>
+            <a href="index.html" class="logo">
+            <img src="img/menu/logo2.jpg" alt="Logo"></a>
+            <p class="tagline">sosial media</p>
+            <h3>Ikuti Kami</h3>
+            <div class="share">
+            <a href="https://www.instagram.com/galihcoffee?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="fab fa-instagram"></a>
+            <a href="#" class="fab fa-tiktok"></a>
+            </div>
         </div>
-    </div>
 
         <div class="box">
             <h3>Utama</h3>
@@ -111,7 +279,6 @@
             <a href="tentang-kami.html">Tentang Kami</a>
             <a href="menu.html">Menu</a>
             <a href="review.html">review</a>
-            <a href="riwayat.html">riwayat</a>
         </div>
 
         <div class="box">
@@ -131,5 +298,14 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="js/script.js"></script>
+    <script>
+      var swiper = new Swiper(".home-slider", {
+        grabCursor: true,
+        loop: true,
+        centeredSlides: true,
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: ".swiper-pagination", clickable: true },
+      });
+    </script>
 </body>
 </html>
