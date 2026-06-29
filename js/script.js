@@ -1,5 +1,5 @@
 // ==========================================
-// 1. NAVIGATION & UI LAYER (Bawaan Galih Coffee)
+// 1. NAVIGATION & UI LAYER
 // ==========================================
 let navbar = document.querySelector('.navbar');
 let searchForm = document.querySelector('.search-form');
@@ -52,7 +52,7 @@ function saveMenuOrders(data) {
 }
 
 // ==========================================
-// 3. HELPERS (Format Tanggal)
+// 3. HELPERS
 // ==========================================
 function formatTanggal(dateStr) {
     const bulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
@@ -67,7 +67,7 @@ function getTodayDateString() {
 }
 
 // ==========================================
-// 4. FORM HANDLING - TABEL CONTACT (review.html) - FIXED (Anti-Crash Dropdown Kopi)
+// 4. FORM HANDLING (review.html)
 // ==========================================
 function initForm() {
     const form = document.getElementById('contactForm');
@@ -87,12 +87,6 @@ function initForm() {
             document.getElementById('inputEmail').value = itemToEdit.email || '';
             document.getElementById('inputPhone').value = itemToEdit.phone || '';
             
-            // Pengaman: Cek dahulu keberadaan elemen di HTML sebelum melakukan pre-fill
-            const coffeeEl = document.getElementById('inputCoffee');
-            if (coffeeEl && itemToEdit.coffee) {
-                coffeeEl.value = itemToEdit.coffee;
-            }
-            
             const btnSubmit = form.querySelector('input[type="submit"]');
             if (btnSubmit) btnSubmit.value = 'Simpan Perubahan';
         }
@@ -104,35 +98,28 @@ function initForm() {
         const name = document.getElementById('inputName').value.trim();
         const email = document.getElementById('inputEmail').value.trim();
         const phone = document.getElementById('inputPhone').value.trim();
-        
-        // Pengaman: Jika elemen select kopi tidak ada di HTML, otomatis gunakan nilai default "-"
-        const coffeeEl = document.getElementById('inputCoffee');
-        const coffee = coffeeEl ? coffeeEl.value : "-";
 
         if (!name || !email || !phone) {
             alert('Semua field wajib diisi!');
             return;
         }
 
-        const contacts = getContacts();
+        let contacts = getContacts();
 
         if (editMode) {
-            for (let i = 0; i < contacts.length; i++) {
-                if (contacts[i].id == editId) {
-                    contacts[i].name = name;
-                    contacts[i].email = email;
-                    contacts[i].phone = phone;
-                    contacts[i].coffee = coffee;
-                    break;
+            contacts = contacts.map(item => {
+                if (item.id == editId) {
+                    return { ...item, name: name, email: email, phone: phone };
                 }
-            }
+                return item;
+            });
         } else {
             contacts.push({
-                id: Date.now(),
+                id: Date.now(), 
                 name: name,
                 email: email,
                 phone: phone,
-                coffee: coffee,
+                coffee: "-",
                 tanggal: getTodayDateString()
             });
         }
@@ -145,8 +132,9 @@ function initForm() {
 }
 
 // ==========================================
-// 5. CLICK MENU HANDLING - TABEL PRODUK (menu.html)
+// 5. CLICK MENU HANDLING (menu.html)
 // ==========================================
+// Menambahkan event listener ke tombol pemesanan menu
 function initMenuOrder() {
     const menuButtons = document.querySelectorAll('.menu .box .btn, .menu .box-container .box .btn, [class*="menu"] .btn');
     if (menuButtons.length === 0) return;
@@ -179,17 +167,15 @@ function initMenuOrder() {
 function initRiwayat() {
     const contactBody = document.getElementById('contactTableBody');
     const menuBody = document.getElementById('menuTableBody');
-    if (!contactBody && !menuBody) return; // Keluar jika bukan halaman riwayat
+    if (!contactBody && !menuBody) return; 
 
     renderContactTable();
     renderMenuTable();
 
-    // Event Hapus Semua Kontak
     document.getElementById('clearContactBtn').addEventListener('click', function() {
         if(confirm('Hapus semua data kontak?')) { saveContacts([]); renderContactTable(); }
     });
 
-    // Event Hapus Semua Pesanan Menu
     document.getElementById('clearMenuBtn').addEventListener('click', function() {
         if(confirm('Hapus semua riwayat pesanan menu?')) { saveMenuOrders([]); renderMenuTable(); }
     });
@@ -218,27 +204,27 @@ function initRiwayat() {
                 <td><strong>${item.name}</strong></td>
                 <td>${item.email}</td>
                 <td>${item.phone}</td>
-                <td>${formatTanggal(item.tanggal)}</td>
                 <td>
-                    <button class="btn-edit-contact" data-id="${item.id}" style="background:#d3ad7f; color:#fff; padding:.4rem .8rem; border:none; border-radius:.3rem; cursor:pointer;"><i class="fas fa-edit"></i></button>
-                    <button class="btn-del-contact" data-id="${item.id}" style="background:#ff4d4d; color:#fff; padding:.4rem .8rem; border:none; border-radius:.3rem; cursor:pointer;"><i class="fas fa-trash"></i></button>
+                    <button class="btn-edit-contact" data-id="${item.id}" style="background:#d3ad7f; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem; margin-right:.5rem;"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn-del-contact" data-id="${item.id}" style="background:#ff4d4d; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem;"><i class="fas fa-trash"></i> Hapus</button>
                 </td>
             `;
             contactBody.appendChild(tr);
         });
 
-        // Set klik aksi tabel kontak
+        // Pindah halaman ke form review.html dengan membawa parameter id
         document.querySelectorAll('.btn-edit-contact').forEach(btn => {
             btn.addEventListener('click', function() {
-                window.location.href = 'review.html?edit=' + this.getAttribute('data-id');
+                const targetId = this.getAttribute('data-id');
+                window.location.href = 'review.html?edit=' + targetId;
             });
         });
 
         document.querySelectorAll('.btn-del-contact').forEach(btn => {
             btn.addEventListener('click', function() {
-                const id = Number(this.getAttribute('data-id'));
+                const id = this.getAttribute('data-id');
                 if (confirm('Hapus kontak ini?')) {
-                    saveContacts(getContacts().filter(item => item.id !== id));
+                    saveContacts(getContacts().filter(item => item.id != id));
                     renderContactTable();
                 }
             });
@@ -269,33 +255,36 @@ function initRiwayat() {
                 <td style="color: #b8956c; font-weight:bold;"><i class="fas fa-coffee"></i> ${item.coffee}</td>
                 <td>${formatTanggal(item.tanggal)}</td>
                 <td>
-                    <button class="btn-edit-menu" data-id="${item.id}" style="background:#d3ad7f; color:#fff; padding:.4rem .8rem; border:none; border-radius:.3rem; cursor:pointer;">Ubah Nama</button>
-                    <button class="btn-del-menu" data-id="${item.id}" style="background:#ff4d4d; color:#fff; padding:.4rem .8rem; border:none; border-radius:.3rem; cursor:pointer;"><i class="fas fa-trash"></i></button>
+                    <button class="btn-edit-menu" data-id="${item.id}" style="background:#d3ad7f; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem; margin-right:.5rem;"><i class="fas fa-edit"></i> Ubah</button>
+                    <button class="btn-del-menu" data-id="${item.id}" style="background:#ff4d4d; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem;"><i class="fas fa-trash"></i> Hapus</button>
                 </td>
             `;
             menuBody.appendChild(tr);
         });
 
-        // Set klik aksi tabel menu
+        // Memunculkan kotak dialog prompt khusus ubah produk menu
         document.querySelectorAll('.btn-edit-menu').forEach(btn => {
             btn.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
                 let localOrders = getMenuOrders();
                 let item = localOrders.find(o => o.id == id);
-                let namaBaru = prompt("Ubah nama produk kopi pilihanmu:", item.coffee);
-                if (namaBaru) {
-                    item.coffee = namaBaru.trim();
-                    saveMenuOrders(localOrders);
-                    renderMenuTable();
+                
+                if (item) {
+                    let namaBaru = prompt("Ubah nama produk kopi pilihanmu:", item.coffee);
+                    if (namaBaru && namaBaru.trim() !== "") {
+                        item.coffee = namaBaru.trim();
+                        saveMenuOrders(localOrders);
+                        renderMenuTable();
+                    }
                 }
             });
         });
 
         document.querySelectorAll('.btn-del-menu').forEach(btn => {
             btn.addEventListener('click', function() {
-                const id = Number(this.getAttribute('data-id'));
+                const id = this.getAttribute('data-id');
                 if (confirm('Hapus pesanan ini?')) {
-                    saveMenuOrders(getMenuOrders().filter(item => item.id !== id));
+                    saveMenuOrders(getMenuOrders().filter(item => item.id != id));
                     renderMenuTable();
                 }
             });
