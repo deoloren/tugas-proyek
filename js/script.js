@@ -1,5 +1,5 @@
 // ==========================================
-// 1. NAVIGATION & UI LAYER
+// 1. NAVIGATION & UI LAYER (Bawaan Galih Coffee)
 // ==========================================
 let navbar = document.querySelector('.navbar');
 let searchForm = document.querySelector('.search-form');
@@ -52,7 +52,7 @@ function saveMenuOrders(data) {
 }
 
 // ==========================================
-// 3. HELPERS
+// 3. HELPERS (Format Tanggal)
 // ==========================================
 function formatTanggal(dateStr) {
     const bulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
@@ -67,30 +67,11 @@ function getTodayDateString() {
 }
 
 // ==========================================
-// 4. FORM HANDLING (review.html)
+// 4. FORM HANDLING - TABEL CONTACT (review.html)
 // ==========================================
 function initForm() {
     const form = document.getElementById('contactForm');
     if (!form) return;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const editId = urlParams.get('edit');
-    let editMode = false;
-
-    if (editId) {
-        const contacts = getContacts();
-        const itemToEdit = contacts.find(item => item.id == editId);
-
-        if (itemToEdit) {
-            editMode = true;
-            document.getElementById('inputName').value = itemToEdit.name || '';
-            document.getElementById('inputEmail').value = itemToEdit.email || '';
-            document.getElementById('inputPhone').value = itemToEdit.phone || '';
-            
-            const btnSubmit = form.querySelector('input[type="submit"]');
-            if (btnSubmit) btnSubmit.value = 'Simpan Perubahan';
-        }
-    }
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -104,37 +85,26 @@ function initForm() {
             return;
         }
 
-        let contacts = getContacts();
-
-        if (editMode) {
-            contacts = contacts.map(item => {
-                if (item.id == editId) {
-                    return { ...item, name: name, email: email, phone: phone };
-                }
-                return item;
-            });
-        } else {
-            contacts.push({
-                id: Date.now(), 
-                name: name,
-                email: email,
-                phone: phone,
-                coffee: "-",
-                tanggal: getTodayDateString()
-            });
-        }
+        const contacts = getContacts();
+        contacts.push({
+            id: Date.now(), 
+            name: name,
+            email: email,
+            phone: phone,
+            coffee: "-",
+            tanggal: getTodayDateString()
+        });
 
         saveContacts(contacts);
         form.reset();
-        alert(editMode ? 'Perubahan Kontak berhasil disimpan!' : 'Data Kontak berhasil disimpan!');
+        alert('Data Kontak berhasil disimpan!');
         window.location.href = 'riwayat.html';
     });
 }
 
 // ==========================================
-// 5. CLICK MENU HANDLING (menu.html)
+// 5. CLICK MENU HANDLING - TABEL PRODUK (menu.html)
 // ==========================================
-// Menambahkan event listener ke tombol pemesanan menu
 function initMenuOrder() {
     const menuButtons = document.querySelectorAll('.menu .box .btn, .menu .box-container .box .btn, [class*="menu"] .btn');
     if (menuButtons.length === 0) return;
@@ -172,10 +142,12 @@ function initRiwayat() {
     renderContactTable();
     renderMenuTable();
 
+    // Event Hapus Semua Kontak
     document.getElementById('clearContactBtn').addEventListener('click', function() {
         if(confirm('Hapus semua data kontak?')) { saveContacts([]); renderContactTable(); }
     });
 
+    // Event Hapus Semua Pesanan Menu
     document.getElementById('clearMenuBtn').addEventListener('click', function() {
         if(confirm('Hapus semua riwayat pesanan menu?')) { saveMenuOrders([]); renderMenuTable(); }
     });
@@ -205,26 +177,55 @@ function initRiwayat() {
                 <td>${item.email}</td>
                 <td>${item.phone}</td>
                 <td>
-                    <button class="btn-edit-contact" data-id="${item.id}" style="background:#d3ad7f; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem; margin-right:.5rem;"><i class="fas fa-edit"></i> Edit</button>
-                    <button class="btn-del-contact" data-id="${item.id}" style="background:#ff4d4d; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem;"><i class="fas fa-trash"></i> Hapus</button>
+                    <button class="btn-edit-contact" data-index="${i}" style="background:#d3ad7f; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem; margin-right:.5rem;"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn-del-contact" data-index="${i}" style="background:#ff4d4d; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem;"><i class="fas fa-trash"></i> Hapus</button>
                 </td>
             `;
             contactBody.appendChild(tr);
         });
 
-        // Pindah halaman ke form review.html dengan membawa parameter id
+        // ============================================================
+        // PERBAIKAN UTAMA: EDIT BANYAK DATA (NAMA, EMAIL, NO HP) BERURUTAN VIA PROMPT
+        // ============================================================
         document.querySelectorAll('.btn-edit-contact').forEach(btn => {
             btn.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-id');
-                window.location.href = 'review.html?edit=' + targetId;
+                const idx = this.getAttribute('data-index');
+                let localContacts = getContacts();
+                let item = localContacts[idx];
+
+                if (item) {
+                    // Prompt 1: Ubah Nama
+                    let namaBaru = prompt("Ubah Nama Pelanggan:", item.name);
+                    if (namaBaru === null) return; // Batalkan proses jika klik 'Cancel'
+                    
+                    // Prompt 2: Ubah Email
+                    let emailBaru = prompt("Ubah Email Pelanggan:", item.email);
+                    if (emailBaru === null) return;
+                    
+                    // Prompt 3: Ubah Nomor Telepon
+                    let phoneBaru = prompt("Ubah Nomor Telepon / HP:", item.phone);
+                    if (phoneBaru === null) return;
+
+                    // Masukkan semua data baru ke local storage (Gunakan data lama jika input kosong kosong)
+                    item.name = namaBaru.trim() !== "" ? namaBaru.trim() : item.name;
+                    item.email = emailBaru.trim() !== "" ? emailBaru.trim() : item.email;
+                    item.phone = phoneBaru.trim() !== "" ? phoneBaru.trim() : item.phone;
+
+                    saveContacts(localContacts);
+                    renderContactTable();
+                    alert("Data Registrasi Kontak berhasil diperbarui!");
+                }
             });
         });
 
+        // Klik aksi hapus tabel kontak
         document.querySelectorAll('.btn-del-contact').forEach(btn => {
             btn.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
+                const idx = this.getAttribute('data-index');
                 if (confirm('Hapus kontak ini?')) {
-                    saveContacts(getContacts().filter(item => item.id != id));
+                    let localContacts = getContacts();
+                    localContacts.splice(idx, 1);
+                    saveContacts(localContacts);
                     renderContactTable();
                 }
             });
@@ -255,19 +256,19 @@ function initRiwayat() {
                 <td style="color: #b8956c; font-weight:bold;"><i class="fas fa-coffee"></i> ${item.coffee}</td>
                 <td>${formatTanggal(item.tanggal)}</td>
                 <td>
-                    <button class="btn-edit-menu" data-id="${item.id}" style="background:#d3ad7f; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem; margin-right:.5rem;"><i class="fas fa-edit"></i> Ubah</button>
-                    <button class="btn-del-menu" data-id="${item.id}" style="background:#ff4d4d; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem;"><i class="fas fa-trash"></i> Hapus</button>
+                    <button class="btn-edit-menu" data-index="${i}" style="background:#d3ad7f; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem; margin-right:.5rem;"><i class="fas fa-edit"></i> Ubah</button>
+                    <button class="btn-del-menu" data-index="${i}" style="background:#ff4d4d; color:#fff; padding:.5rem 1rem; border:none; border-radius:.3rem; cursor:pointer; font-size:1.2rem;"><i class="fas fa-trash"></i> Hapus</button>
                 </td>
             `;
             menuBody.appendChild(tr);
         });
 
-        // Memunculkan kotak dialog prompt khusus ubah produk menu
+        // Klik aksi edit nama kopi tabel menu via Dialog Prompt
         document.querySelectorAll('.btn-edit-menu').forEach(btn => {
             btn.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
+                const idx = this.getAttribute('data-index');
                 let localOrders = getMenuOrders();
-                let item = localOrders.find(o => o.id == id);
+                let item = localOrders[idx];
                 
                 if (item) {
                     let namaBaru = prompt("Ubah nama produk kopi pilihanmu:", item.coffee);
@@ -280,11 +281,14 @@ function initRiwayat() {
             });
         });
 
+        // Klik aksi hapus tabel menu
         document.querySelectorAll('.btn-del-menu').forEach(btn => {
             btn.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
+                const idx = this.getAttribute('data-index');
                 if (confirm('Hapus pesanan ini?')) {
-                    saveMenuOrders(getMenuOrders().filter(item => item.id != id));
+                    let localOrders = getMenuOrders();
+                    localOrders.splice(idx, 1);
+                    saveMenuOrders(localOrders);
                     renderMenuTable();
                 }
             });
